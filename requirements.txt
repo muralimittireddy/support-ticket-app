@@ -4,3 +4,5 @@ jinja2
 python-multipart
 psycopg2-binary
 python-dotenv
+databricks-sdk>=0.30.0
+databricks-sql-connector>=3.4.0

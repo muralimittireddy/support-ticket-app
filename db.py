@@ -5,7 +5,26 @@ from dotenv import load_dotenv
 
 load_dotenv()  # reads .env file into environment variables
 
-LAKEBASE_URL = os.environ["LAKEBASE_URL"]
+def _resolve_lakebase_url() -> str:
+    """
+    Local dev: read LAKEBASE_URL directly from .env.
+    Deployed (Databricks Apps): fetch the secret at runtime using the
+    scope/key names injected as env vars, via the Databricks SDK.
+    """
+    if os.environ.get("LAKEBASE_URL"):
+        return os.environ["LAKEBASE_URL"]
+
+    from databricks.sdk import WorkspaceClient
+
+    scope = os.environ["LAKEBASE_SECRET_SCOPE"]
+    key = os.environ["LAKEBASE_SECRET_KEY"]
+
+    w = WorkspaceClient()
+    secret_response = w.secrets.get_secret(scope=scope, key=key)
+    return base64.b64decode(secret_response.value).decode("utf-8")
+
+
+LAKEBASE_URL = _resolve_lakebase_url()
 
 
 def get_connection():
