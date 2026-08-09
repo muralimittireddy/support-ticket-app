@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+    <p><a href="/">&larr; Back to all tickets</a></p>
+
+    <h2>{{ ticket.title }}</h2>
+    <p>Priority: {{ ticket.priority }}</p>
+
+    <form action="/tickets/{{ ticket.ticket_id }}/status" method="post">
+        <label>Status:
+            <select name="status">
+                <option value="open" {% if ticket.status == "open" %}selected{% endif %}>open</option>
+                <option value="in_progress" {% if ticket.status == "in_progress" %}selected{% endif %}>in_progress</option>
+                <option value="resolved" {% if ticket.status == "resolved" %}selected{% endif %}>resolved</option>
+            </select>
+        </label>
+        <button type="submit">Update Status</button>
+    </form>
+
+    <h3>Messages</h3>
+    <ul>
+        {% for m in messages %}
+        <li><strong>{{ m.author }}</strong> ({{ m.created_at }}): {{ m.message_text }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Add a message</h3>
+    <form action="/tickets/{{ ticket.ticket_id }}/messages" method="post">
+        <input type="text" name="author" placeholder="Your name" required>
+        <br>
+        <textarea name="message_text" placeholder="Message" required></textarea>
+        <br>
+        <button type="submit">Add Message</button>
+    </form>
+{% endblock %}

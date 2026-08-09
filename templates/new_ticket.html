@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+    <p><a href="/">&larr; Back to all tickets</a></p>
+    <h2>New Ticket</h2>
+
+    <form action="/tickets" method="post">
+        <input type="text" name="title" placeholder="Ticket title" required>
+        <br>
+        <input type="text" name="created_by" placeholder="Your name" required>
+        <br>
+        <select name="priority">
+            <option value="low">low</option>
+            <option value="medium" selected>medium</option>
+            <option value="high">high</option>
+        </select>
+        <br>
+        <button type="submit">Create Ticket</button>
+    </form>
+{% endblock %}
