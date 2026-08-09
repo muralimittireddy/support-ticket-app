@@ -1,0 +1,12 @@
+-- Insert 3 tickets across different statuses/priorities
+INSERT INTO tickets (title, status, priority, created_by) VALUES
+    ('Cannot log into portal', 'open', 'high', 'asha.mehta'),
+    ('Report export is slow', 'in_progress', 'medium', 'raj.verma'),
+    ('Typo on invoice PDF', 'resolved', 'low', 'priya.singh');
+
+-- Insert 2+ messages per ticket, referencing the generated ticket_ids
+INSERT INTO ticket_messages (ticket_id, message_text, author)
+SELECT ticket_id, 'Initial report: ' || title, created_by FROM tickets;
+
+INSERT INTO ticket_messages (ticket_id, message_text, author)
+SELECT ticket_id, 'Looking into this now.', 'support.agent' FROM tickets;
